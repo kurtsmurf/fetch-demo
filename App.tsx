@@ -6,28 +6,39 @@ import {
   StyleSheet,
   Text,
   View,
+  Image
 } from "react-native";
 import axios from "axios";
 
-export default function App() {
+const useYesNoAPI = () => {
   const [answer, setAnswer] = useState("");
+  const [image, setImage] = useState("")
   const [loading, setLoading] = useState(true);
 
   const fetchAnAnswer = () => {
     setLoading(true);
 
     axios("https://yesno.wtf/api")
-      .then((response) => response.data.answer)
-      .then(setAnswer)
+      .then((response) => response.data)
+      .then((data) => {
+        setAnswer(data.answer)
+        setImage(data.image)
+      })
       .then(() => setLoading(false));
   };
 
   useEffect(fetchAnAnswer, []);
 
+  return { answer, image, loading, next: fetchAnAnswer }
+}
+
+export default function App() {
+   const { answer, image, loading, next } = useYesNoAPI()
+
   const Answer = () => {
     const AnswerText = () => (<Text
       style={{
-        fontSize: 100,
+        fontSize: 100
       }}
     >
       {answer}
@@ -54,16 +65,25 @@ export default function App() {
       <Button
         disabled={loading}
         title="next"
-        onPress={fetchAnAnswer}
+        onPress={next}
       />
     </View>
   );
 
   return (
     <View style={styles.container}>
+      <Image 
+        source={{
+          uri: image
+        }}
+        style={{
+          flex: 2,
+          height: 300,
+          width: '100%'
+        }}
+      />
       <Answer />
       <NextButton />
-      <StatusBar style="auto" />
     </View>
   );
 }
