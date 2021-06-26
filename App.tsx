@@ -24,35 +24,40 @@ export default function App() {
 
   useEffect(fetchAnAnswer, []);
 
-  const Answer = () => (
-    <View style={{
-      height: 200,
-      flex: 2,
-      alignItems: "center",
-      justifyContent: "center"
-    }}>
-      {loading ? <ActivityIndicator /> : <Text
-        style={{
-          fontSize: 100,
-        }}
-      >
-        {answer}
-      </Text>}
-    </View>
-  );
+  const Answer = () => {
+    const AnswerText = () => (<Text
+      style={{
+        fontSize: 100,
+      }}
+    >
+      {answer}
+    </Text>);
+
+    return <View
+      style={{
+        height: 200,
+        flex: 2,
+        alignItems: "center",
+        justifyContent: "center",
+      }}
+    >
+      {loading ? <ActivityIndicator size="large" color="blue" /> : <AnswerText />}
+    </View>;
+  };
 
   const NextButton = () => (
-    <View       style={{
-        flex: 1
-    }}
->
+    <View
+      style={{
+        flex: 1,
+      }}
+    >
       <Button
         disabled={loading}
         title="next"
         onPress={fetchAnAnswer}
       />
     </View>
-  )
+  );
 
   return (
     <View style={styles.container}>
