@@ -1,5 +1,4 @@
-import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import {
   ActivityIndicator,
   Button,
@@ -8,29 +7,7 @@ import {
   View,
   Image
 } from "react-native";
-import axios from "axios";
-
-const useYesNoAPI = () => {
-  const [answer, setAnswer] = useState("");
-  const [image, setImage] = useState("")
-  const [loading, setLoading] = useState(true);
-
-  const fetchAnAnswer = () => {
-    setLoading(true);
-
-    axios("https://yesno.wtf/api")
-      .then((response) => response.data)
-      .then((data) => {
-        setAnswer(data.answer)
-        setImage(data.image)
-      })
-      .then(() => setLoading(false));
-  };
-
-  useEffect(fetchAnAnswer, []);
-
-  return { answer, image, loading, next: fetchAnAnswer }
-}
+import { useYesNoAPI } from "./useYesNoAPI";
 
 export default function App() {
    const { answer, image, loading, next } = useYesNoAPI()
